@@ -1,0 +1,92 @@
+<html>
+    <head>
+        <title>지역 검색</title>
+        <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+        <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=44d1b3004b74505984ae8c166eea87e1"></script>
+        <link rel="stylesheet" href="style.css"/>
+        <style>
+            #map{margin:10px auto;}
+        </style>
+    </head>
+    <body>
+        <div id="page">
+            <div id="top">
+                <a href="blog.html">블로그 검색</a>&nbsp;&nbsp;&nbsp;
+                <a href="book.html">도서 검색</a>&nbsp;&nbsp;&nbsp;
+                <a href="local.html">지역 검색</a>&nbsp;&nbsp;&nbsp;
+            </div>
+            <div id="content">
+                <div class="subject"><h1>[지역 검색]</h1></div>
+                <div id="divSearch">
+                    <input type="text" id="txtQuery" value="인천일보 아카데미"/>                    
+                    <select id="selSize">
+                        <option value="5">5건씩 출력</option>
+                        <option value="10" selected>10건씩 출력</option>
+                        <option value="15">15건씩 출력</option>
+                        <option value="20">20건씩 출력</option>
+                    </select>
+                    <input type="button" id="btnSearch" value="검 색"/>
+                </div>
+                <table id="tbl"></table>
+                <script id="temp" type="text/x-handlebars-template">
+                    <tr class="title">
+                        <td width=200>제목</td>
+                        <td width=300>주소</td>
+                        <td width=100>전화번호</td>
+                        <td width=30>지도</td>
+                    </tr>
+                    {{#each documents}}
+                    <tr class="row">
+                        <td>{{{place_name}}}</td>
+                        <td>{{{address_name}}}</td>
+                        <td>{{{phone}}}</td>
+                        <td><button x="{{x}}" y="{{y}}" place="{{place_name}}" phone="{{phone}}">지도</button></td>
+                    </tr>
+                    {{/each}}
+                </script>                
+                <div id="divPage">
+                    <button id="btnPre">◀</button>
+                    <span id="spanPage"></span>
+                    <button id="btnNext">▶</button>
+                </div>
+                <!--지도출력-->
+                <div id="map" style="width:700px;height:400px;border:1px solid black;"></div>
+            </div>
+            <div id="bottom">
+                <h3>작성자: 인천일보 아카데미 홍길동</h3>
+            </div>
+        </div>      
+    </body>
+    <script>
+        url="https://dapi.kakao.com/v2/local/search/keyword.json";
+        $("#tbl").on("click", ".row button", function(){
+            var x=$(this).attr("x");
+            var y=$(this).attr("y");       
+            var container = document.getElementById('map');
+            var options = {
+                center: new kakao.maps.LatLng(y, x),
+                level: 3
+            };
+            var map = new kakao.maps.Map(container, options);
+            
+            var marker = new kakao.maps.Marker({            
+                position: map.getCenter() 
+            });         
+            marker.setMap(map);
+
+            var str ="<div style='padding:5px;color:blue;'>";
+                str+=$(this).attr("place") + "<br>";
+                str+="<b>Tel:"+$(this).attr("phone")+"</b>";
+                str+="</div>";
+            var info=new kakao.maps.InfoWindow({content:str});
+            kakao.maps.event.addListener(marker,"mouseover", function(){
+                info.open(map, marker);
+            });
+            kakao.maps.event.addListener(marker,"mouseout", function(){
+                info.close(map, marker);
+            });            
+        });
+    </script>
+    <script src="stript.js"></script>   
+</html>

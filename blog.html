@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <title>블로그 검색</title>
+        <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+        <link rel="stylesheet" href="style.css"/>
+    </head>
+    <body>
+        <div id="page">
+            <div id="top">
+                <a href="blog.html">블로그 검색</a>&nbsp;&nbsp;&nbsp;
+                <a href="book.html">도서 검색</a>&nbsp;&nbsp;&nbsp;
+                <a href="local.html">지역 검색</a>&nbsp;&nbsp;&nbsp;
+            </div>
+            <div id="content">
+                <div class="subject"><h1>[블로그 검색]</h1></div>
+                <div id="divSearch">
+                    <input type="text" id="txtQuery" value="자바"/>                    
+                    <select id="selSize">
+                        <option value="5">5건씩 출력</option>
+                        <option value="10">10건씩 출력</option>
+                        <option value="15" selected>15건씩 출력</option>
+                        <option value="20">20건씩 출력</option>
+                    </select>
+                    <input type="button" id="btnSearch" value="검 색"/>
+                </div>
+                <table id="tbl"></table>
+                <script id="temp" type="text/x-handlebars-template">
+                    <tr class="title">
+                        <td>제목</td>
+                    </tr>
+                    {{#each documents}}
+                    <tr class="row">
+                        <td><a href="{{url}}" target=_blank>{{{title}}}</a></td>
+                    </tr>
+                    {{/each}}
+                </script>                
+                <div id="divPage">
+                    <button id="btnPre">◀</button>
+                    <span id="spanPage"></span>
+                    <button id="btnNext">▶</button>
+                </div>
+            </div>
+            <div id="bottom">
+                <h3>작성자: 인천일보 아카데미 홍길동</h3>
+            </div>
+        </div>
+    </body>
+    <script>
+        url="https://dapi.kakao.com/v2/search/blog"
+    </script>
+    <script src="stript.js"></script>   
+</html>
